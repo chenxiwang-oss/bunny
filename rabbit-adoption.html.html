@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找到你的完美兔伙伴 | 爱心兔兔领养中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 100%);
+            color: #4a4a4a;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8e44ad 0%, #6c5ce7 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .header-icon {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 40px;
+            opacity: 0.2;
+        }
+        
+        .progress-container {
+            padding: 15px 20px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #6c5ce7, #8e44ad);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-container {
+            padding: 30px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .question.active {
+            display: block;
+        }
+        
+        .question-number {
+            font-size: 14px;
+            color: #8e44ad;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 16px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background: #e8eaf6;
+            border-color: #8e44ad;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #6c5ce7;
+        }
+        
+        .option-icon {
+            margin-right: 10px;
+            font-size: 20px;
+            color: #6c5ce7;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        #prev-btn {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        #prev-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        #next-btn {
+            background: linear-gradient(to right, #6c5ce7, #8e44ad);
+            color: white;
+            opacity: 0.7;
+        }
+        
+        #next-btn:enabled {
+            opacity: 1;
+        }
+        
+        #next-btn:enabled:hover {
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .result-container {
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-title {
+            color: #8e44ad;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .rabbit-card {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e3f2fd 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .rabbit-img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .rabbit-name {
+            font-size: 22px;
+            color: #6c5ce7;
+            margin: 10px 0;
+        }
+        
+        .rabbit-type {
+            font-size: 16px;
+            color: #8e44ad;
+            margin-bottom: 15px;
+        }
+        
+        .rabbit-description {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .primary-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+        }
+        
+        .secondary-btn {
+            background: transparent;
+            color: #6c5ce7;
+            border: 2px solid #6c5ce7;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 500px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .question-text {
+                font-size: 16px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i class="fas fa-rabbit header-icon"></i>
+            <h1>找到你的完美兔伙伴</h1>
+            <p>回答几个问题，找到最适合你的兔子朋友</p>
+        </div>
+        
+        <div class="progress-container">
+            <span id="progress-text">问题 1/3</span>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <span>33%</span>
+        </div>
+        
+        <div class="question-container">
+            <div class="question active" id="q1">
+                <div class="question-number">问题 1 / 3</div>
+                <div class="question-text">你想领养什么性格的小兔？</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(1, 'a')">
+                        <i class="fas fa-heart option-icon"></i>
+                        <span>a. 性格温顺的公主兔</span>
+                    </div>
+                    <div class="option" onclick="selectOption(1, 'b')">
+                        <i class="fas fa-shield-alt option-icon"></i>
+                        <span>b. 性格坚毅的王子兔</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q2">
+                <div class="question-number">问题 2 / 3</div>
+                <div class="question-text">你想领养已经绝育的兔兔吗？</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(2, 'a')">
+                        <i class="fas fa-check-circle option-icon"></i>
+                        <span>a. 是的，我想领养已经绝育的兔兔</span>
+                    </div>
+                    <div class="option" onclick="selectOption(2, 'b')">
+                        <i class="fas fa-user-md option-icon"></i>
+                        <span>b. 不，我想亲自带她去绝育</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q3">
+                <div class="question-number">问题 3 / 3</div>
+                <div class="question-text">你希望兔兔的体型是？</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(3, 'a')">
+                        <i class="fas fa-bars option-icon"></i>
+                        <span>a. 小型兔（体重小于2kg）</span>
+                    </div>
+                    <div class="option" onclick="selectOption(3, 'b')">
+                        <i class="fas fa-bars option-icon"></i>
+                        <span>b. 中型兔（体重2-4kg）</span>
+                    </div>
+                    <div class="option" onclick="selectOption(3, 'c')">
+                        <i class="fas fa-bars option-icon"></i>
+                        <span>c. 大型兔（体重大于4kg）</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button id="prev-btn" onclick="prevQuestion()" disabled>
+                <i class="fas fa-arrow-left"></i> 上一题
+            </button>
+            <button id="next-btn" onclick="nextQuestion()" disabled>
+                下一题 <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <div class="result-container" id="result">
+            <h2 class="result-title">为你找到完美匹配！</h2>
+            
+            <div class="rabbit-card">
+                <h3 class="rabbit-name" id="rabbit-name">雪球</h3>
+                <p class="rabbit-type" id="rabbit-type">公主兔 · 已绝育 · 小型兔</p>
+                
+                <img src="https://placehold.co/400x300/FFE4E1/000000?text=雪球" alt="推荐兔子" class="rabbit-img" id="rabbit-img">
+                
+                <div class="rabbit-description" id="rabbit-description">
+                    <p>雪球是一只温顺可爱的公主兔，已经完成绝育手术。她性格温和，喜欢被轻轻抚摸，是初养兔者的完美选择。</p>
+                    <p>雪球已经2岁了，疫苗齐全，会用便盆，喜欢胡萝卜和新鲜蔬菜。她需要一个有爱心的家庭，能够给她足够的关注和照顾。</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn primary-btn">
+                        <i class="fas fa-heart"></i> 申请领养
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="restartQuiz()">
+                        <i class="fas fa-redo"></i> 重新测试
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>爱心兔兔领养中心 &copy; 2023 | 为每只兔子寻找温暖的家</p>
+        </div>
+    </div>
+
+    <script>
+        // 存储用户答案和当前问题
+        const answers = {};
+        let currentQuestion = 1;
+        const totalQuestions = 3;
+        
+        // 兔子数据库
+        const rabbits = {
+            '1a2a3a': {
+                name: "雪球",
+                type: "公主兔 · 已绝育 · 小型兔",
+                image: "https://placehold.co/400x300/FFE4E1/000000?text=雪球",
+                description: "雪球是一只温顺可爱的公主兔，已经完成绝育手术。她性格温和，喜欢被轻轻抚摸，是初养兔者的完美选择。雪球已经2岁了，疫苗齐全，会用便盆，喜欢胡萝卜和新鲜蔬菜。她需要一个有爱心的家庭，能够给她足够的关注和照顾。"
+            },
+            '1a2a3b': {
+                name: "棉花糖",
+                type: "公主兔 · 已绝育 · 中型兔",
+                image: "https://placehold.co/400x300/FFE4E1/000000?text=棉花糖",
+                description: "棉花糖是一只温柔粘人的公主兔，已经完成绝育手术。她性格温和亲人，喜欢安静的环境，是理想的室内伴侣兔。棉花糖已经1岁半了，健康状况良好，喜欢被抱在怀里，会使用便盆。"
+            },
+            '1a2b3a': {
+                name: "小白",
+                type: "公主兔 · 未绝育 · 小型兔",
+                image: "https://placehold.co/400x300/FFE4E1/000000?text=小白",
+                description: "小白是一只活泼好奇的公主兔，尚未绝育但健康状况良好。她喜欢探索新环境，需要一个有耐心和时间的主人带她去完成绝育手术。小白已经10个月大，聪明伶俐，能够学会一些小技巧。"
+            },
+            '1b2a3c': {
+                name: "咖啡",
+                type: "王子兔 · 已绝育 · 大型兔",
+                image: "https://placehold.co/400x300/D2B48C/000000?text=咖啡",
+                description: "咖啡是一只勇敢活泼的王子兔，已经完成绝育。他精力充沛，喜欢探索新环境，需要一个有经验的领养者。咖啡已经3岁了，体型较大，需要较大的生活空间，喜欢户外活动。"
+            },
+            '1b2b3b': {
+                name: "巧克力",
+                type: "王子兔 · 未绝育 · 中型兔",
+                image: "https://placehold.co/400x300/D2B48C/000000?text=巧克力",
+                description: "巧克力是一只聪明独立的王子兔，尚未绝育。他有着坚毅的性格，喜欢有自己的空间，适合有养兔经验的人。巧克力已经1岁了，健康状况良好，需要主人安排绝育手术。"
+            },
+            'default': {
+                name: "毛毛",
+                type: "混合品种 · 状况视选择而定",
+                image: "https://placehold.co/400x300/E6E6FA/000000?text=等待领养",
+                description: "根据您的选择，我们有多只合适的兔兔等待领养。请联系我们了解更多信息，我们的工作人员会为您推荐最匹配的兔兔朋友。"
+            }
+        };
+        
+        // 更新进度条和文本
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `问题 ${currentQuestion}/${totalQuestions}`;
+            document.querySelector('.progress-container span:last-child').textContent = `${Math.round(progress)}%`;
+        }
+        
+        // 选择选项
+        function selectOption(questionNum, option) {
+            answers[`q${questionNum}`] = option;
+            document.getElementById('next-btn').disabled = false;
+            
+            // 高亮选中的选项
+            const options = document.querySelectorAll(`#q${questionNum} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+        
+        // 下一题
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                document.getElementById(`q${currentQuestion}`).classList.remove('active');
+                currentQuestion++;
+                document.getElementById(`q${currentQuestion}`).classList.add('active');
+                document.getElementById('prev-btn').disabled = false;
+                document.getElementById('next-btn').disabled = true;
+                
+                updateProgress();
+            } else {
+                // 所有问题已回答，显示结果
+                showResult();
+            }
+        }
+        
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                document.getElementById(`q${currentQuestion}`).classList.remove('active');
+                currentQuestion--;
+                document.getElementById(`q${currentQuestion}`).classList.add('active');
+                document.getElementById('next-btn').disabled = false;
+                
+                if (currentQuestion === 1) {
+                    document.getElementById('prev-btn').disabled = true;
+                }
+                
+                updateProgress();
+            }
+        }
+        
+        // 显示匹配结果
+        function showResult() {
+            // 隐藏问题界面，显示结果界面
+            document.querySelector('.question-container').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            
+            // 生成答案键
+            const answerKey = `1${answers.q1}2${answers.q2}3${answers.q3}`;
+            
+            // 获取匹配的兔子或使用默认值
+            const rabbit = rabbits[answerKey] || rabbits['default'];
+            
+            // 更新结果页面
+            document.getElementById('rabbit-name').textContent = rabbit.name;
+            document.getElementById('rabbit-type').textContent = rabbit.type;
+            document.getElementById('rabbit-img').src = rabbit.image;
+            document.getElementById('rabbit-img').alt = rabbit.name;
+            document.getElementById('rabbit-description').innerHTML = `<p>${rabbit.description}</p>`;
+        }
+        
+        // 重新开始测试
+        function restartQuiz() {
+            // 重置状态
+            for (let key in answers) {
+                delete answers[key];
+            }
+            currentQuestion = 1;
+            
+            // 隐藏结果界面，显示问题界面
+            document.getElementById('result').style.display = 'none';
+            document.querySelector('.question-container').style.display = 'block';
+            document.querySelector('.navigation').style.display = 'flex';
+            document.querySelector('.progress-container').style.display = 'flex';
+            
+            // 重置问题状态
+            document.querySelectorAll('.question').forEach((q, index) => {
+                q.classList.remove('active');
+                if (index === 0) q.classList.add('active');
+            });
+            
+            // 清除选项选择
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 重置按钮状态
+            document.getElementById('prev-btn').disabled = true;
+            document.getElementById('next-btn').disabled = true;
+            
+            // 更新进度
+            updateProgress();
+        }
+        
+        // 初始化进度条
+        updateProgress();
+    </script>
+</body>
+</html>
